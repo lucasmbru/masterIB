@@ -14,10 +14,12 @@ class PopulationEvolution:
         self.delta_t = Delta_t/N
         self.u = u
 
-
         self.palpha = alpha*Delta_t/u      # Probability of migration event
         self.pnu = nu*Delta_t/u            # Probability of birth event
         self.pmu = mu*Delta_t/(1-u)        # Probability of death event
+
+        self.T_ext = 0                     # Time of extintion
+        self.N_ext = 0                     # Number of extintions
 
         self.population = [n_0]
         self.t = 0
@@ -54,11 +56,15 @@ class PopulationEvolution:
         None
         """
         self.t = 0
+        self.T_ext = 0
+        self.N_ext = 1
         n = self.n_0
         self.population = [n]
 
         while True:
             self.t += self.delta_t
+            if n == 0:
+                self.T_ext += self.delta_t
             
             # Choice the type of interaction (u: single, 1-u: double)
             if random.random() < self.u:
@@ -68,6 +74,8 @@ class PopulationEvolution:
                 if specie == "A":   # The place choiced is occupied by a specie A
                     if random.random() < self.pmu:
                         n -= 1  # Death event (A -> E)
+                        if n == 0:  # The population is extinted with n = 0
+                            self.N_ext += 1
                 else:               # The place choiced is occupied by a specie E
                     if random.random() < self.palpha:
                         n += 1  # Expontanical migration event (E -> A)
@@ -142,16 +150,14 @@ class PopulationEvolution:
                     length_extinted_periods.append(cuurrent_length)
                     cuurrent_length = 0
         
-        # This is for the case when the last value is zero
+        # This is for the case when the last value is zero. Should we add it?
         if cuurrent_length != 0:
             length_extinted_periods.append(cuurrent_length)
         
         return np.array(length_extinted_periods)
     
-
-# Subclass of PopulationEvolution for plotting an evolution of population
-
 class PlotPopulationEvolution(PopulationEvolution):
+    """Subclass of PopulationEvolution for plotting an evolution of population"""
     def plot_evolution(self, ax) -> None:
         """ Function that plots the population evolution
         
