@@ -80,14 +80,53 @@ class P0vsNu(MasterEquation):
         self.P0s = np.zeros(N_nus)
 
     def makeP0vsNu(self) -> None:
+        """
+        Function that calculates the stationary distribution for different values of nu
+
+        Returns:
+        --------
+        None
+        """
         for i, nu in enumerate(self.nus):
             self.set_parameters(self.mu, nu, self.alpha)
             self.set_matrix()
             self.get_nullSpace()
             self.P0s[i] = self.P0
     
-    def getnuVector(self):
+    def getnuVector(self) -> np.array:
+        """
+        Function that returns the vector of nu values
+
+        Returns:
+        --------
+        nus: np.array
+            Vector of nu values
+        """
         return self.nus
     
-    def getP0Vector(self):
+    def getP0Vector(self) -> np.array:
+        """
+        Function that returns the vector of P0 values
+
+        Returns:
+        --------
+        P0s: np.array
+            Vector of P0 values
+        """
         return self.P0s
+    
+    def getCaracteristicNu(self, r) -> float:
+        """
+        Function that return the nu value which is closest to the value P0 = r. This will be the characteristic value of nu to quantify the behavior of the system
+
+        Returns:
+        --------
+        nu: float
+            Value of nu
+
+        Inputs:
+        -------
+        r: float
+            Value of P0
+        """
+        return self.nus[np.argmin(np.abs(self.P0s-r))]
