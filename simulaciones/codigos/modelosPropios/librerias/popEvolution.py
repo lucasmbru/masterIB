@@ -120,7 +120,6 @@ class PopulationEvolution:
         --------
         np.array: Distribution of n values without zeros
         """
-
         return np.array([n for n in self.population if n != 0])
     
     def get_zeros(self) -> int:
@@ -132,7 +131,7 @@ class PopulationEvolution:
         """
         return self.population.count(0)
 
-    def get_distribution_of_lenght_extinted(self) -> np.array:
+    def get_distribution_of_length_extinted(self) -> np.array:
         """ Function that returns the distribution of the duration of the extinted periods
 
         Returns:
@@ -194,7 +193,7 @@ class PlotPopulationEvolution(PopulationEvolution):
         ax.set_yticklabels(range(0, self.N+1))
         ax.set_ylim([-0.5, self.N+0.5])
 
-    def plot_distribution_of_lenghts_extinted(self, ax) -> None:
+    def plot_distribution_of_lengths_extinted(self, ax) -> None:
         """ Function that plots the distribution of the duration of the extinted periods
         
         Parameters:
