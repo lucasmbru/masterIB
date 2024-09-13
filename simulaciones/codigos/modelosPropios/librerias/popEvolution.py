@@ -95,6 +95,52 @@ class PopulationEvolution:
             if self.t >= t_max:
                 break
 
+    
+    def make_single_evolution(self):
+        n = self.n_0
+        self.population = [n]
+        self.t = 0
+        
+        while True:
+
+            if n == 0:
+                break
+
+            self.t += self.delta_t
+
+            # Choice the type of interaction (u: single, 1-u: double)
+            if random.random() < self.u:
+                # Single interaction
+                place = random.randint(0, self.N-1)
+                specie = self.specie_choiced(place, n)
+                if specie == "A":   # The place choiced is occupied by a specie A
+                    if random.random() < self.pmu:
+                        n -= 1  # Death event (A -> E)
+                else:               # The place choiced is occupied by a specie E
+                    if random.random() < self.palpha:
+                        n += 1  # Expontanical migration event (E -> A)
+            else: 
+                # Double interaction
+                place1, place2 = random.sample(range(self.N), 2)
+                specie1 = self.specie_choiced(place1, n)
+                specie2 = self.specie_choiced(place2, n)
+                if specie1 == "A" and specie2 == "E":
+                    # First place is occupied by A and the second by E
+                    if random.random() < self.pnu:
+                        n += 1  # Birth event (A + E -> A + A)
+                # Any other combination, nothing happens
+
+            self.population.append(n)       # Add the new value of n to the population list 
+
+
+        mean = np.mean(self.population)
+        std = np.std(self.population)
+        medium = np.median(self.population)
+        max_value = max(self.population)
+        length = self.t
+
+        return mean, medium, std, max_value, length
+
     def get_time(self):
         """ Function that returns the time evolution of the system
         
