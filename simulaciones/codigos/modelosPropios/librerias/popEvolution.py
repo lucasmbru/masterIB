@@ -201,6 +201,10 @@ class PopulationEvolution:
         
         return np.array(length_extinted_periods)
     
+    def deletePopulationClass(self):
+        # delete memory
+        del self.population
+    
 class PlotPopulationEvolution(PopulationEvolution):
     """Subclass of PopulationEvolution for plotting an evolution of population"""
     def plot_evolution(self, ax) -> None:
